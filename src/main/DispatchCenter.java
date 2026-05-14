@@ -3,6 +3,13 @@ import java.util.Comparator;
 import java.util.List;
 
 public class DispatchCenter {
+
+    private final ResolutionStrategy resolutionStrategy;
+
+    public DispatchCenter(ResolutionStrategy resolutionStrategy) {
+        this.resolutionStrategy = resolutionStrategy;
+    }
+
     public TurnReport resolveTurn(List<City> cities, List<Hero> heroes, List<Incident> incidents) {
         TurnReport report = new TurnReport();
 
@@ -17,7 +24,7 @@ public class DispatchCenter {
             }
 
             assignedHero.dispatchToMission();
-            boolean success = resolveIncident(assignedHero, incident);
+            boolean success = resolutionStrategy.isSuccessful(assignedHero, incident);
             applyOutcome(incident, assignedHero, success, report);
         }
 
@@ -47,11 +54,6 @@ public class DispatchCenter {
             }
         }
         return bestHero;
-    }
-
-    private boolean resolveIncident(Hero hero, Incident incident) {
-        int capabilityScore = hero.getPowerLevel() - hero.getStressLevel();
-        return capabilityScore >= incident.getDifficultyScore() * 4;
     }
 
     private void applyOutcome(Incident incident, Hero hero, boolean success, TurnReport report) {
