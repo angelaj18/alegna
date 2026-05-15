@@ -1,0 +1,81 @@
+<mxfile host="app.diagrams.net" modified="2026-05-15T12:00:00.000Z" agent="Cursor" version="22.1.0" type="device">
+  <diagram id="sprint3-patterns" name="Sprint3-Strategy-Factory">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="ifaceRS" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;interface&amp;gt;&amp;gt;&lt;/i&gt;&lt;br/&gt;&lt;b&gt;ResolutionStrategy&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;&lt;p style=&quot;margin:0px;text-align:left;margin-left:8px;&quot;&gt;+ isSuccessful(hero: Hero, incident: Incident): boolean&lt;/p&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#fff2cc;strokeColor=#d6b656;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="40" width="320" height="100" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="clsHR" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;HrApprovedHeroicsStrategy&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;&lt;p style=&quot;margin:0px;text-align:left;margin-left:8px;&quot;&gt;- DIFFICULTY_MULTIPLIER: int = 4&lt;/p&gt;&lt;hr/&gt;&lt;p style=&quot;margin:0px;text-align:left;margin-left:8px;&quot;&gt;+ isSuccessful(hero, incident): boolean&lt;/p&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#d5e8d4;strokeColor=#82b366;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="220" width="280" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="clsMN" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;ManagerIsNotHereStrategy&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;&lt;p style=&quot;margin:0px;text-align:left;margin-left:8px;&quot;&gt;- DIFFICULTY_MULTIPLIER: int = 5&lt;/p&gt;&lt;hr/&gt;&lt;p style=&quot;margin:0px;text-align:left;margin-left:8px;&quot;&gt;+ isSuccessful(hero, incident): boolean&lt;/p&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#d5e8d4;strokeColor=#82b366;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="220" width="280" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="implHR" style="endArrow=block;endFill=0;dashed=1;html=1;exitX=0.5;exitY=0;entryX=0.25;entryY=1;endSize=10;" edge="1" parent="1" source="clsHR" target="ifaceRS">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="lblHR" value="implements" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="implHR">
+          <mxGeometry x="-0.2" y="1" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+        </mxCell>
+
+        <mxCell id="implMN" style="endArrow=block;endFill=0;dashed=1;html=1;exitX=0.5;exitY=0;entryX=0.75;entryY=1;endSize=10;" edge="1" parent="1" source="clsMN" target="ifaceRS">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="clsDC" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;DispatchCenter&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;&lt;p style=&quot;margin:0px;text-align:left;margin-left:8px;&quot;&gt;- hrApprovedHeroics: ResolutionStrategy&lt;br/&gt;- managerIsNotHere: ResolutionStrategy&lt;/p&gt;&lt;hr/&gt;&lt;p style=&quot;margin:0px;text-align:left;margin-left:8px;&quot;&gt;+ DispatchCenter(hrApprovedHeroics, managerIsNotHere)&lt;br/&gt;+ resolveTurn(cities, heroes, incidents, assignedHeroes): TurnReport&lt;br/&gt;- strategyFor(incident): ResolutionStrategy&lt;br/&gt;- applyOutcome(...)&lt;br/&gt;- applyUnresolvedIncidentImpact(...)&lt;/p&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#dae8fc;strokeColor=#6c8ebf;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="400" width="400" height="200" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="useDC1" style="endArrow=open;html=1;endSize=8;dashed=1;exitX=0.35;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="clsDC" target="ifaceRS">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="useDClbl" value="uses (delegates isSuccessful)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="useDC1">
+          <mxGeometry x="-0.1" y="2" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+        </mxCell>
+
+        <mxCell id="ifaceGW" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;interface&amp;gt;&amp;gt;&lt;/i&gt;&lt;br/&gt;&lt;b&gt;GameWorldFactory&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;&lt;p style=&quot;margin:0px;text-align:left;margin-left:8px;&quot;&gt;+ createCities(): List&amp;lt;City&amp;gt;&lt;br/&gt;+ createHeroes(): List&amp;lt;Hero&amp;gt;&lt;/p&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#fff2cc;strokeColor=#d6b656;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="420" width="240" height="110" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="clsDGW" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;DefaultGameWorldFactory&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;&lt;p style=&quot;margin:0px;text-align:left;margin-left:8px;&quot;&gt;&lt;/p&gt;&lt;hr/&gt;&lt;p style=&quot;margin:0px;text-align:left;margin-left:8px;&quot;&gt;+ createCities(): List&amp;lt;City&amp;gt;&lt;br/&gt;+ createHeroes(): List&amp;lt;Hero&amp;gt;&lt;/p&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#e1d5e7;strokeColor=#9673a6;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="600" width="260" height="110" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="implDGW" style="endArrow=block;endFill=0;dashed=1;html=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;endSize=10;" edge="1" parent="1" source="clsDGW" target="ifaceGW">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="implDGWL" value="implements" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="implDGW">
+          <mxGeometry x="-0.1" y="1" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+        </mxCell>
+
+        <mxCell id="clsMain" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;Main&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;&lt;p style=&quot;margin:0px;text-align:left;margin-left:8px;&quot;&gt;&lt;/p&gt;&lt;hr/&gt;&lt;p style=&quot;margin:0px;text-align:left;margin-left:8px;&quot;&gt;+ main(args): void&lt;br/&gt;- collectAssignments(...)&lt;br/&gt;- promptDispatchForIncident(...)&lt;/p&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#f8cecc;strokeColor=#b85450;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="400" width="260" height="130" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="mainUsesF" style="endArrow=open;html=1;dashed=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="clsMain" target="ifaceGW">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="mainUsesFl" value="creates DefaultGameWorldFactory&#xa;calls factory methods" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="mainUsesF">
+          <mxGeometry x="-0.2" y="1" relative="1" as="geometry"><mxPoint x="10" y="-8" as="offset"/></mxGeometry>
+        </mxCell>
+
+        <mxCell id="title" value="Sprint 3 — Design patterns (Strategy + Factory)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="8" width="400" height="24" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="mainUsesDC" style="endArrow=open;html=1;dashed=1;exitX=0;exitY=0.25;entryX=1;entryY=0.5;" edge="1" parent="1" source="clsMain" target="clsDC">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="mainUsesDCl" value="creates DispatchCenter with strategies" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="mainUsesDC">
+          <mxGeometry x="-0.15" y="-1" relative="1" as="geometry"><mxPoint y="-10" as="offset"/></mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
