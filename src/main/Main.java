@@ -1,4 +1,7 @@
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -9,11 +12,111 @@ public class Main {
         IncidentGenerator generator = new IncidentGenerator();
         List<Incident> incidents = generator.generateIncidents(cities);
 
+        List<Incident> ordered = new ArrayList<>(incidents);
+        ordered.sort(Comparator.comparingInt(Incident::getDifficultyScore).reversed());
+
+        Scanner scanner = new Scanner(System.in);
+        List<Hero> assignments = collectAssignments(ordered, heroes, scanner);
+        scanner.close();
+
         DispatchCenter dispatchCenter =
             new DispatchCenter(new HrApprovedHeroicsStrategy(), new ManagerIsNotHereStrategy());
-        TurnReport report = dispatchCenter.resolveTurn(cities, heroes, incidents);
+        TurnReport report = dispatchCenter.resolveTurn(cities, heroes, ordered, assignments);
 
-        System.out.println("=== Alegna Dispach: Sprint 2 Prototype ===");
+        System.out.println();
+        System.out.println("=== Alegna Dispach: Sprint 3 ===");
         report.print();
+    }
+
+    private static List<Hero> collectAssignments(
+        List<Incident> orderedIncidents,
+        List<Hero> roster,
+        Scanner scanner
+    ) {
+        List<Hero> assignedPerIncident = new ArrayList<>();
+        List<Hero> stillAvailable = new ArrayList<>(roster);
+
+        System.out.println("=== Dispatch board: assign one responder per incident (hardest first) ===");
+
+        for (int i = 0; i < orderedIncidents.size(); i++) {
+            Incident inc = orderedIncidents.get(i);
+            Hero choice =
+                promptDispatchForIncident(
+                    stillAvailable,
+                    scanner,
+                    i + 1,
+                    orderedIncidents.size(),
+                    inc
+                );
+            assignedPerIncident.add(choice);
+        }
+
+        return assignedPerIncident;
+    }
+
+    private static Hero promptDispatchForIncident(
+        List<Hero> stillAvailable,
+        Scanner scanner,
+        int index,
+        int total,
+        Incident inc
+    ) {
+        System.out.println();
+        System.out.println(
+            "Incident "
+                + index
+                + " of "
+                + total
+                + " — "
+                + inc.getType()
+                + " in "
+                + inc.getCity().getName()
+                + " | severity "
+                + inc.getSeverity()
+                + " urgency "
+                + inc.getUrgency()
+                + " | difficulty "
+                + inc.getDifficultyScore()
+        );
+
+        if (stillAvailable.isEmpty()) {
+            System.out.println("No heroes left to assign. Leaving this incident unresolved.");
+            return null;
+        }
+
+        System.out.println("  0 = no dispatch (leave unresolved)");
+        for (int h = 0; h < stillAvailable.size(); h++) {
+            Hero hero = stillAvailable.get(h);
+            System.out.println(
+                "  "
+                    + (h + 1)
+                    + " = "
+                    + hero.getName()
+                    + " (power "
+                    + hero.getPowerLevel()
+                    + ", stress "
+                    + hero.getStressLevel()
+                    + ")"
+            );
+        }
+
+        while (true) {
+            System.out.print("Dispatch which hero? Enter number: ");
+            String line = scanner.nextLine().trim();
+            int pick;
+            try {
+                pick = Integer.parseInt(line);
+            } catch (NumberFormatException e) {
+                System.out.println("  Enter a whole number.");
+                continue;
+            }
+            if (pick == 0) {
+                return null;
+            }
+            if (pick >= 1 && pick <= stillAvailable.size()) {
+                return stillAvailable.remove(pick - 1);
+            }
+            System.out.println("  Invalid choice; try again.");
+        }
     }
 }

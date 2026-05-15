@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class DispatchCenter {
@@ -12,15 +10,24 @@ public class DispatchCenter {
         this.managerIsNotHere = managerIsNotHere;
     }
 
-    public TurnReport resolveTurn(List<City> cities, List<Hero> heroes, List<Incident> incidents) {
+    public TurnReport resolveTurn(
+        List<City> cities,
+        List<Hero> heroes,
+        List<Incident> incidentsInDispatchOrder,
+        List<Hero> assignedHeroes
+    ) {
+        if (incidentsInDispatchOrder.size() != assignedHeroes.size()) {
+            throw new IllegalArgumentException(
+                "Incidents and assignments lists must have the same length."
+            );
+        }
         TurnReport report = new TurnReport();
 
-        List<Incident> orderedIncidents = new ArrayList<>(incidents);
-        orderedIncidents.sort(Comparator.comparingInt(Incident::getDifficultyScore).reversed());
+        for (int i = 0; i < incidentsInDispatchOrder.size(); i++) {
+            Incident incident = incidentsInDispatchOrder.get(i);
+            Hero assignedHero = assignedHeroes.get(i);
 
-        for (Incident incident : orderedIncidents) {
-            Hero assignedHero = findBestAvailableHero(heroes);
-            if (assignedHero == null) {
+            if (assignedHero == null || !assignedHero.isAvailable()) {
                 applyUnresolvedIncidentImpact(incident.getCity(), report, incident);
                 continue;
             }
@@ -44,19 +51,6 @@ public class DispatchCenter {
         }
 
         return report;
-    }
-
-    private Hero findBestAvailableHero(List<Hero> heroes) {
-        Hero bestHero = null;
-        for (Hero hero : heroes) {
-            if (!hero.isAvailable()) {
-                continue;
-            }
-            if (bestHero == null || hero.getPowerLevel() > bestHero.getPowerLevel()) {
-                bestHero = hero;
-            }
-        }
-        return bestHero;
     }
 
     private ResolutionStrategy strategyFor(Incident incident) {
