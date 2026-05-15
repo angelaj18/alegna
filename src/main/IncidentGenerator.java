@@ -19,7 +19,13 @@ public class IncidentGenerator {
             IncidentType type = types[random.nextInt(types.length)];
             int severity = random.nextInt(MAX_SCALE - MIN_SCALE + 1) + MIN_SCALE;
             int urgency = random.nextInt(MAX_SCALE - MIN_SCALE + 1) + MIN_SCALE;
-            incidents.add(new Incident(type, city, severity, urgency));
+            if (type == IncidentType.VILLAIN_ATTACK) {
+                incidents.add(
+                    new Incident(type, city, severity, urgency, VillainCodex.randomCodename())
+                );
+            } else {
+                incidents.add(new Incident(type, city, severity, urgency));
+            }
         }
 
         return incidents;

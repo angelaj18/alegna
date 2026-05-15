@@ -68,14 +68,10 @@ public class Main {
                 + " of "
                 + total
                 + " — "
-                + inc.getType()
+                + inc.getStoryTitle()
                 + " in "
                 + inc.getCity().getName()
-                + " | severity "
-                + inc.getSeverity()
-                + " urgency "
-                + inc.getUrgency()
-                + " | difficulty "
+                + " | pressure "
                 + inc.getDifficultyScore()
         );
 

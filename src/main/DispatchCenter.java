@@ -68,7 +68,7 @@ public class DispatchCenter {
             report.addEvent(
                 hero.getName()
                     + " resolved "
-                    + incident.getType()
+                    + incident.getStoryTitle()
                     + " in "
                     + city.getName()
                     + " successfully."
@@ -82,7 +82,7 @@ public class DispatchCenter {
         report.addEvent(
             hero.getName()
                 + " failed to contain "
-                + incident.getType()
+                + incident.getStoryTitle()
                 + " in "
                 + city.getName()
                 + "."
@@ -95,7 +95,7 @@ public class DispatchCenter {
         city.adjustTrust(-8);
         report.addEvent(
             "No hero available for "
-                + incident.getType()
+                + incident.getStoryTitle()
                 + " in "
                 + city.getName()
                 + ". Incident remained unresolved."
