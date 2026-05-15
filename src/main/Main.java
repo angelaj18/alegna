@@ -17,7 +17,7 @@ public class Main {
         List<Incident> incidents = generator.generateIncidents(cities);
 
         DispatchCenter dispatchCenter =
-            new DispatchCenter(new PowerVersusDifficultyResolutionStrategy());
+            new DispatchCenter(new HrApprovedHeroicsStrategy(), new ManagerIsNotHereStrategy());
         TurnReport report = dispatchCenter.resolveTurn(cities, heroes, incidents);
 
         System.out.println("=== Alegna Dispach: Sprint 2 Prototype ===");

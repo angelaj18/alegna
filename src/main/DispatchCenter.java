@@ -4,10 +4,12 @@ import java.util.List;
 
 public class DispatchCenter {
 
-    private final ResolutionStrategy resolutionStrategy;
+    private final ResolutionStrategy hrApprovedHeroics;
+    private final ResolutionStrategy managerIsNotHere;
 
-    public DispatchCenter(ResolutionStrategy resolutionStrategy) {
-        this.resolutionStrategy = resolutionStrategy;
+    public DispatchCenter(ResolutionStrategy hrApprovedHeroics, ResolutionStrategy managerIsNotHere) {
+        this.hrApprovedHeroics = hrApprovedHeroics;
+        this.managerIsNotHere = managerIsNotHere;
     }
 
     public TurnReport resolveTurn(List<City> cities, List<Hero> heroes, List<Incident> incidents) {
@@ -24,7 +26,8 @@ public class DispatchCenter {
             }
 
             assignedHero.dispatchToMission();
-            boolean success = resolutionStrategy.isSuccessful(assignedHero, incident);
+            ResolutionStrategy strategy = strategyFor(incident);
+            boolean success = strategy.isSuccessful(assignedHero, incident);
             applyOutcome(incident, assignedHero, success, report);
         }
 
@@ -56,6 +59,13 @@ public class DispatchCenter {
         return bestHero;
     }
 
+    private ResolutionStrategy strategyFor(Incident incident) {
+        if (incident.getType() == IncidentType.VILLAIN_ATTACK) {
+            return managerIsNotHere;
+        }
+        return hrApprovedHeroics;
+    }
+
     private void applyOutcome(Incident incident, Hero hero, boolean success, TurnReport report) {
         City city = incident.getCity();
         if (success) {
@@ -68,6 +78,7 @@ public class DispatchCenter {
                     + " in "
                     + city.getName()
                     + " successfully."
+                    + villainOutcomeFlavor(incident, true)
             );
             return;
         }
@@ -81,6 +92,7 @@ public class DispatchCenter {
                 + " in "
                 + city.getName()
                 + "."
+                + villainOutcomeFlavor(incident, false)
         );
     }
 
@@ -93,6 +105,24 @@ public class DispatchCenter {
                 + " in "
                 + city.getName()
                 + ". Incident remained unresolved."
+                + villainUnresolvedFlavor(incident)
         );
+    }
+
+    private String villainOutcomeFlavor(Incident incident, boolean success) {
+        if (incident.getType() != IncidentType.VILLAIN_ATTACK) {
+            return "";
+        }
+        if (success) {
+            return " (Dispatch desk: Manager Is Not Here doctrine — win logged as \"extremely okay.\")";
+        }
+        return " (Dispatch desk: Manager Is Not Here doctrine — HR is sending a strongly worded sigh.)";
+    }
+
+    private String villainUnresolvedFlavor(Incident incident) {
+        if (incident.getType() != IncidentType.VILLAIN_ATTACK) {
+            return "";
+        }
+        return " (Nobody could cover; the manager is still not here. Chaos wins this round.)";
     }
 }

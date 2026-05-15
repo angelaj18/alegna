@@ -1,4 +1,4 @@
-public class PowerVersusDifficultyResolutionStrategy implements ResolutionStrategy {
+public class HrApprovedHeroicsStrategy implements ResolutionStrategy {
 
     private static final int DIFFICULTY_MULTIPLIER = 4;
 
