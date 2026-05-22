@@ -4,10 +4,16 @@ public class DispatchCenter {
 
     private final ResolutionStrategy hrApprovedHeroics;
     private final ResolutionStrategy managerIsNotHere;
+    private final GameEventListener eventListener;
 
-    public DispatchCenter(ResolutionStrategy hrApprovedHeroics, ResolutionStrategy managerIsNotHere) {
+    public DispatchCenter(
+        ResolutionStrategy hrApprovedHeroics,
+        ResolutionStrategy managerIsNotHere,
+        GameEventListener eventListener
+    ) {
         this.hrApprovedHeroics = hrApprovedHeroics;
         this.managerIsNotHere = managerIsNotHere;
+        this.eventListener = eventListener;
     }
 
     public TurnReport resolveTurn(
@@ -29,6 +35,7 @@ public class DispatchCenter {
 
             if (assignedHero == null || !assignedHero.isAvailable()) {
                 applyUnresolvedIncidentImpact(incident.getCity(), report, incident);
+                notifyListener(new DispatchEvent(DispatchOutcome.UNRESOLVED, incident, null));
                 continue;
             }
 
@@ -36,6 +43,9 @@ public class DispatchCenter {
             ResolutionStrategy strategy = strategyFor(incident);
             boolean success = strategy.isSuccessful(assignedHero, incident);
             applyOutcome(incident, assignedHero, success, report);
+            DispatchOutcome outcome =
+                success ? DispatchOutcome.RESOLVED_SUCCESS : DispatchOutcome.RESOLVED_FAILURE;
+            notifyListener(new DispatchEvent(outcome, incident, assignedHero));
         }
 
         for (Hero hero : heroes) {
@@ -118,5 +128,11 @@ public class DispatchCenter {
             return "";
         }
         return " (Nobody could cover; the manager is still not here. Chaos wins this round.)";
+    }
+
+    private void notifyListener(DispatchEvent event) {
+        if (eventListener != null) {
+            eventListener.onDispatchEvent(event);
+        }
     }
 }

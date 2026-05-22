@@ -19,8 +19,13 @@ public class Main {
         List<Hero> assignments = collectAssignments(ordered, heroes, scanner);
         scanner.close();
 
+        GameEventListener hrFeed = new HrDispatchFeed();
         DispatchCenter dispatchCenter =
-            new DispatchCenter(new HrApprovedHeroicsStrategy(), new ManagerIsNotHereStrategy());
+            new DispatchCenter(
+                new HrApprovedHeroicsStrategy(),
+                new ManagerIsNotHereStrategy(),
+                hrFeed
+            );
         TurnReport report = dispatchCenter.resolveTurn(cities, heroes, ordered, assignments);
 
         System.out.println();
