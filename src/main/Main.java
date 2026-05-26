@@ -16,7 +16,7 @@ public class Main {
         ordered.sort(Comparator.comparingInt(Incident::getDifficultyScore).reversed());
 
         Scanner scanner = new Scanner(System.in);
-        List<Hero> assignments = collectAssignments(ordered, heroes, scanner);
+        List<DispatchCommand> dispatchCommands = collectDispatchCommands(ordered, heroes, scanner);
         scanner.close();
 
         DispatchNotifier dispatchNotifier = new DispatchNotifier();
@@ -29,26 +29,26 @@ public class Main {
                 new ManagerIsNotHereStrategy(),
                 dispatchNotifier
             );
-        TurnReport report = dispatchCenter.resolveTurn(cities, heroes, ordered, assignments);
+        TurnReport report = dispatchCenter.resolveTurnFromCommands(cities, heroes, dispatchCommands);
 
         System.out.println();
         System.out.println("=== Alegna Dispach: Sprint 3 ===");
         report.print();
     }
 
-    private static List<Hero> collectAssignments(
+    private static List<DispatchCommand> collectDispatchCommands(
         List<Incident> orderedIncidents,
         List<Hero> roster,
         Scanner scanner
     ) {
-        List<Hero> assignedPerIncident = new ArrayList<>();
+        List<DispatchCommand> commands = new ArrayList<>();
         List<Hero> stillAvailable = new ArrayList<>(roster);
 
         System.out.println("=== Dispatch board: assign one responder per incident (hardest first) ===");
 
         for (int i = 0; i < orderedIncidents.size(); i++) {
             Incident inc = orderedIncidents.get(i);
-            Hero choice =
+            DispatchCommand command =
                 promptDispatchForIncident(
                     stillAvailable,
                     scanner,
@@ -56,13 +56,13 @@ public class Main {
                     orderedIncidents.size(),
                     inc
                 );
-            assignedPerIncident.add(choice);
+            commands.add(command);
         }
 
-        return assignedPerIncident;
+        return commands;
     }
 
-    private static Hero promptDispatchForIncident(
+    private static DispatchCommand promptDispatchForIncident(
         List<Hero> stillAvailable,
         Scanner scanner,
         int index,
@@ -85,7 +85,7 @@ public class Main {
 
         if (stillAvailable.isEmpty()) {
             System.out.println("No heroes left to assign. Leaving this incident unresolved.");
-            return null;
+            return new SkipIncidentCommand(inc);
         }
 
         System.out.println("  0 = no dispatch (leave unresolved)");
@@ -115,10 +115,11 @@ public class Main {
                 continue;
             }
             if (pick == 0) {
-                return null;
+                return new SkipIncidentCommand(inc);
             }
             if (pick >= 1 && pick <= stillAvailable.size()) {
-                return stillAvailable.remove(pick - 1);
+                Hero chosen = stillAvailable.remove(pick - 1);
+                return new AssignHeroCommand(chosen, inc);
             }
             System.out.println("  Invalid choice; try again.");
         }

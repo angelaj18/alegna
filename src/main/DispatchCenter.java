@@ -16,36 +16,15 @@ public class DispatchCenter {
         this.dispatchNotifier = dispatchNotifier;
     }
 
-    public TurnReport resolveTurn(
+    public TurnReport resolveTurnFromCommands(
         List<City> cities,
         List<Hero> heroes,
-        List<Incident> incidentsInDispatchOrder,
-        List<Hero> assignedHeroes
+        List<DispatchCommand> commands
     ) {
-        if (incidentsInDispatchOrder.size() != assignedHeroes.size()) {
-            throw new IllegalArgumentException(
-                "Incidents and assignments lists must have the same length."
-            );
-        }
         TurnReport report = new TurnReport();
 
-        for (int i = 0; i < incidentsInDispatchOrder.size(); i++) {
-            Incident incident = incidentsInDispatchOrder.get(i);
-            Hero assignedHero = assignedHeroes.get(i);
-
-            if (assignedHero == null || !assignedHero.isAvailable()) {
-                applyUnresolvedIncidentImpact(incident.getCity(), report, incident);
-                notifyListeners(new DispatchEvent(DispatchOutcome.UNRESOLVED, incident, null));
-                continue;
-            }
-
-            assignedHero.dispatchToMission();
-            ResolutionStrategy strategy = strategyFor(incident);
-            boolean success = strategy.isSuccessful(assignedHero, incident);
-            applyOutcome(incident, assignedHero, success, report);
-            DispatchOutcome outcome =
-                success ? DispatchOutcome.RESOLVED_SUCCESS : DispatchOutcome.RESOLVED_FAILURE;
-            notifyListeners(new DispatchEvent(outcome, incident, assignedHero));
+        for (DispatchCommand command : commands) {
+            command.execute(this, report);
         }
 
         for (Hero hero : heroes) {
@@ -61,6 +40,26 @@ public class DispatchCenter {
         }
 
         return report;
+    }
+
+    public void dispatchHeroToIncident(Hero hero, Incident incident, TurnReport report) {
+        if (hero == null || !hero.isAvailable()) {
+            skipIncident(incident, report);
+            return;
+        }
+
+        hero.dispatchToMission();
+        ResolutionStrategy strategy = strategyFor(incident);
+        boolean success = strategy.isSuccessful(hero, incident);
+        applyOutcome(incident, hero, success, report);
+        DispatchOutcome outcome =
+            success ? DispatchOutcome.RESOLVED_SUCCESS : DispatchOutcome.RESOLVED_FAILURE;
+        notifyListeners(new DispatchEvent(outcome, incident, hero));
+    }
+
+    public void skipIncident(Incident incident, TurnReport report) {
+        applyUnresolvedIncidentImpact(incident.getCity(), report, incident);
+        notifyListeners(new DispatchEvent(DispatchOutcome.UNRESOLVED, incident, null));
     }
 
     private ResolutionStrategy strategyFor(Incident incident) {
