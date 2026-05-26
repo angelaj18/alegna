@@ -4,16 +4,16 @@ public class DispatchCenter {
 
     private final ResolutionStrategy hrApprovedHeroics;
     private final ResolutionStrategy managerIsNotHere;
-    private final GameEventListener eventListener;
+    private final DispatchNotifier dispatchNotifier;
 
     public DispatchCenter(
         ResolutionStrategy hrApprovedHeroics,
         ResolutionStrategy managerIsNotHere,
-        GameEventListener eventListener
+        DispatchNotifier dispatchNotifier
     ) {
         this.hrApprovedHeroics = hrApprovedHeroics;
         this.managerIsNotHere = managerIsNotHere;
-        this.eventListener = eventListener;
+        this.dispatchNotifier = dispatchNotifier;
     }
 
     public TurnReport resolveTurn(
@@ -35,7 +35,7 @@ public class DispatchCenter {
 
             if (assignedHero == null || !assignedHero.isAvailable()) {
                 applyUnresolvedIncidentImpact(incident.getCity(), report, incident);
-                notifyListener(new DispatchEvent(DispatchOutcome.UNRESOLVED, incident, null));
+                notifyListeners(new DispatchEvent(DispatchOutcome.UNRESOLVED, incident, null));
                 continue;
             }
 
@@ -45,7 +45,7 @@ public class DispatchCenter {
             applyOutcome(incident, assignedHero, success, report);
             DispatchOutcome outcome =
                 success ? DispatchOutcome.RESOLVED_SUCCESS : DispatchOutcome.RESOLVED_FAILURE;
-            notifyListener(new DispatchEvent(outcome, incident, assignedHero));
+            notifyListeners(new DispatchEvent(outcome, incident, assignedHero));
         }
 
         for (Hero hero : heroes) {
@@ -130,9 +130,9 @@ public class DispatchCenter {
         return " (Nobody could cover; the manager is still not here. Chaos wins this round.)";
     }
 
-    private void notifyListener(DispatchEvent event) {
-        if (eventListener != null) {
-            eventListener.onDispatchEvent(event);
+    private void notifyListeners(DispatchEvent event) {
+        if (dispatchNotifier != null) {
+            dispatchNotifier.notifyListeners(event);
         }
     }
 }
