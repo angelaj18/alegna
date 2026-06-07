@@ -1,0 +1,101 @@
+<mxfile host="app.diagrams.net" modified="2026-05-26T17:00:00.000Z" agent="Cursor" version="22.1.0" type="device">
+  <diagram id="all-patterns" name="Design-Patterns-Sprint4">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="Alegna Dispach — Design Patterns (Sprint 4)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="500" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Strategy -->
+        <mxCell id="lblS" value="Strategy" style="text;html=1;fontStyle=1;fontSize=13" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="120" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="RS" value="&lt;&lt;interface&gt;&gt;&lt;br&gt;&lt;b&gt;ResolutionStrategy&lt;/b&gt;&lt;hr&gt;+ isSuccessful(hero, incident): boolean" style="swimlane;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="260" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="HR" value="&lt;b&gt;HrApprovedHeroicsStrategy&lt;/b&gt;&lt;hr&gt;- DIFFICULTY_MULTIPLIER: int&lt;hr&gt;+ isSuccessful(...): boolean" style="swimlane;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="40" y="210" width="260" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="MN" value="&lt;b&gt;ManagerIsNotHereStrategy&lt;/b&gt;&lt;hr&gt;- DIFFICULTY_MULTIPLIER: int&lt;hr&gt;+ isSuccessful(...): boolean" style="swimlane;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="40" y="320" width="260" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="DCs" value="&lt;b&gt;DispatchCenter&lt;/b&gt;&lt;hr&gt;- hrApprovedHeroics: ResolutionStrategy&lt;br&gt;- managerIsNotHere: ResolutionStrategy&lt;hr&gt;- strategyFor(incident): ResolutionStrategy&lt;br&gt;+ dispatchHeroToIncident(...)" style="swimlane;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="40" y="440" width="300" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="eHR" style="endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="HR" target="RS"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eMN" style="endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="MN" target="RS"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eDCs" style="endArrow=open;dashed=1;" edge="1" parent="1" source="DCs" target="RS"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- Factory -->
+        <mxCell id="lblF" value="Factory" style="text;html=1;fontStyle=1;fontSize=13" vertex="1" parent="1">
+          <mxGeometry x="400" y="60" width="120" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="GWF" value="&lt;&lt;interface&gt;&gt;&lt;br&gt;&lt;b&gt;GameWorldFactory&lt;/b&gt;&lt;hr&gt;+ createCities(): List&amp;lt;City&amp;gt;&lt;br&gt;+ createHeroes(): List&amp;lt;Hero&amp;gt;" style="swimlane;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="400" y="90" width="260" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="DGW" value="&lt;b&gt;DefaultGameWorldFactory&lt;/b&gt;&lt;hr&gt;+ createCities(): List&amp;lt;City&amp;gt;&lt;br&gt;+ createHeroes(): List&amp;lt;Hero&amp;gt;" style="swimlane;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="400" y="220" width="260" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="MainF" value="&lt;b&gt;Main&lt;/b&gt;&lt;hr&gt;+ main(args): void" style="swimlane;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="400" y="350" width="200" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="eDGW" style="endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="DGW" target="GWF"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eMainF" style="endArrow=open;dashed=1;" edge="1" parent="1" source="MainF" target="GWF"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- Observer -->
+        <mxCell id="lblO" value="Observer" style="text;html=1;fontStyle=1;fontSize=13" vertex="1" parent="1">
+          <mxGeometry x="720" y="60" width="120" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="GEL" value="&lt;&lt;interface&gt;&gt;&lt;br&gt;&lt;b&gt;GameEventListener&lt;/b&gt;&lt;hr&gt;+ onDispatchEvent(event): void" style="swimlane;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="720" y="90" width="260" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="DN" value="&lt;b&gt;DispatchNotifier&lt;/b&gt;&lt;hr&gt;- listeners: List&amp;lt;GameEventListener&amp;gt;&lt;hr&gt;+ register(listener): void&lt;br&gt;+ notifyListeners(event): void" style="swimlane;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="720" y="200" width="280" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="HRF" value="&lt;b&gt;HrDispatchFeed&lt;/b&gt;&lt;hr&gt;+ onDispatchEvent(event): void" style="swimlane;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="720" y="330" width="240" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="ATL" value="&lt;b&gt;AuditTrailListener&lt;/b&gt;&lt;hr&gt;+ onDispatchEvent(event): void" style="swimlane;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="720" y="420" width="240" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="DE" value="&lt;b&gt;DispatchEvent&lt;/b&gt;&lt;hr&gt;- outcome: DispatchOutcome&lt;br&gt;- incident: Incident&lt;br&gt;- hero: Hero" style="swimlane;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="720" y="510" width="240" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="DCo" value="&lt;b&gt;DispatchCenter&lt;/b&gt;&lt;hr&gt;- dispatchNotifier: DispatchNotifier&lt;hr&gt;notifyListeners(event)" style="swimlane;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="720" y="620" width="280" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="eHRF" style="endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="HRF" target="GEL"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eATL" style="endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="ATL" target="GEL"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eDN1" style="endArrow=open;dashed=1;" edge="1" parent="1" source="DN" target="GEL"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eDCo" style="endArrow=open;dashed=1;" edge="1" parent="1" source="DCo" target="DN"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- Command -->
+        <mxCell id="lblC" value="Command" style="text;html=1;fontStyle=1;fontSize=13" vertex="1" parent="1">
+          <mxGeometry x="40" y="600" width="120" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="DCmd" value="&lt;&lt;interface&gt;&gt;&lt;br&gt;&lt;b&gt;DispatchCommand&lt;/b&gt;&lt;hr&gt;+ execute(center, report): void" style="swimlane;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="40" y="630" width="260" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="AHC" value="&lt;b&gt;AssignHeroCommand&lt;/b&gt;&lt;hr&gt;- hero: Hero&lt;br&gt;- incident: Incident&lt;hr&gt;+ execute(...): void" style="swimlane;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="40" y="740" width="260" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="SIC" value="&lt;b&gt;SkipIncidentCommand&lt;/b&gt;&lt;hr&gt;- incident: Incident&lt;hr&gt;+ execute(...): void" style="swimlane;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="40" y="850" width="260" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="DCc" value="&lt;b&gt;DispatchCenter&lt;/b&gt;&lt;hr&gt;+ resolveTurnFromCommands(...): TurnReport&lt;br&gt;+ dispatchHeroToIncident(...)&lt;br&gt;+ skipIncident(...)" style="swimlane;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="360" y="740" width="300" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="MainC" value="&lt;b&gt;Main&lt;/b&gt;&lt;hr&gt;- collectDispatchCommands(...)&lt;br&gt;- promptDispatchForIncident(...)" style="swimlane;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="360" y="870" width="280" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="eAHC" style="endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="AHC" target="DCmd"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eSIC" style="endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="SIC" target="DCmd"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eMainC" style="endArrow=open;dashed=1;" edge="1" parent="1" source="MainC" target="DCmd"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eDCc" style="endArrow=open;dashed=1;" edge="1" parent="1" source="DCc" target="DCmd"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

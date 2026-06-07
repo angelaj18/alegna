@@ -32,7 +32,7 @@ public class Main {
         TurnReport report = dispatchCenter.resolveTurnFromCommands(cities, heroes, dispatchCommands);
 
         System.out.println();
-        System.out.println("=== Alegna Dispach: Sprint 3 ===");
+        System.out.println("=== Alegna Dispach: Sprint 4 ===");
         report.print();
     }
 
