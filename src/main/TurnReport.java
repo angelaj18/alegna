@@ -29,6 +29,8 @@ public class TurnReport {
     public void addHeroStatus(Hero hero) {
         heroStatuses.add(
             hero.getName()
+                + " | Status: "
+                + hero.getStatusLabel()
                 + " | Power: "
                 + hero.getPowerLevel()
                 + " | Stress: "

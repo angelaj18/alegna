@@ -2,13 +2,13 @@ public class Hero {
     private final String name;
     private final int powerLevel;
     private int stressLevel;
-    private boolean available;
+    private HeroState state;
 
     public Hero(String name, int powerLevel) {
         this.name = name;
         this.powerLevel = powerLevel;
         this.stressLevel = 10;
-        this.available = true;
+        this.state = new ReadyState();
     }
 
     public String getName() {
@@ -23,17 +23,31 @@ public class Hero {
         return stressLevel;
     }
 
+    public String getStatusLabel() {
+        return state.getStatusLabel();
+    }
+
     public boolean isAvailable() {
-        return available;
+        return state.canBeDispatched();
     }
 
     public void dispatchToMission() {
-        available = false;
-        stressLevel = Math.min(100, stressLevel + 20);
+        state.onDispatched(this);
     }
 
     public void recoverAfterTurn() {
-        available = true;
+        state.onShiftEnd(this);
+    }
+
+    void setState(HeroState state) {
+        this.state = state;
+    }
+
+    void applyMissionStress() {
+        stressLevel = Math.min(100, stressLevel + 20);
+    }
+
+    void applyShiftRecovery() {
         stressLevel = Math.max(0, stressLevel - 5);
     }
 }
