@@ -1,4 +1,4 @@
-public class OnMissionState implements HeroState {
+public class RecoveringState implements HeroState {
 
     @Override
     public boolean canBeDispatched() {
@@ -7,21 +7,19 @@ public class OnMissionState implements HeroState {
 
     @Override
     public void onDispatched(Hero hero) {
-        // Hero is already deployed.
+        // HR has not cleared this hero for redeployment yet.
     }
 
     @Override
     public void onShiftEnd(Hero hero) {
-        if (hero.getStressLevel() >= Hero.getRecoveringStressThreshold()) {
-            hero.setState(new RecoveringState());
-        } else {
-            hero.applyShiftRecovery();
+        hero.applyShiftRecovery();
+        if (hero.getStressLevel() < Hero.getClearRecoveringStress()) {
             hero.setState(new ReadyState());
         }
     }
 
     @Override
     public String getStatusLabel() {
-        return "On mission";
+        return "Recovering (HR hold)";
     }
 }

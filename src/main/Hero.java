@@ -1,4 +1,8 @@
 public class Hero {
+    private static final int RECOVERING_STRESS_THRESHOLD = 30;
+    private static final int CLEAR_RECOVERING_STRESS = 25;
+    private static final int MAX_READY_STRESS = 95;
+
     private final String name;
     private final int powerLevel;
     private int stressLevel;
@@ -28,7 +32,7 @@ public class Hero {
     }
 
     public boolean isAvailable() {
-        return state.canBeDispatched();
+        return state.canBeDispatched() && stressLevel < MAX_READY_STRESS;
     }
 
     public void dispatchToMission() {
@@ -37,6 +41,14 @@ public class Hero {
 
     public void recoverAfterTurn() {
         state.onShiftEnd(this);
+    }
+
+    static int getRecoveringStressThreshold() {
+        return RECOVERING_STRESS_THRESHOLD;
+    }
+
+    static int getClearRecoveringStress() {
+        return CLEAR_RECOVERING_STRESS;
     }
 
     void setState(HeroState state) {

@@ -42,7 +42,12 @@ public class Main {
         Scanner scanner
     ) {
         List<DispatchCommand> commands = new ArrayList<>();
-        List<Hero> stillAvailable = new ArrayList<>(roster);
+        List<Hero> stillAvailable = new ArrayList<>();
+        for (Hero hero : roster) {
+            if (hero.isAvailable()) {
+                stillAvailable.add(hero);
+            }
+        }
 
         System.out.println("=== Dispatch board: assign one responder per incident (hardest first) ===");
 
@@ -96,7 +101,9 @@ public class Main {
                     + (h + 1)
                     + " = "
                     + hero.getName()
-                    + " (power "
+                    + " ("
+                    + hero.getStatusLabel()
+                    + ", power "
                     + hero.getPowerLevel()
                     + ", stress "
                     + hero.getStressLevel()
