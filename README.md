@@ -1,4 +1,4 @@
-# YourProj
+# alegna
 
 SE 350 Project
 
@@ -77,7 +77,7 @@ Observer was introduced with `GameEventListener` and `HrDispatchFeed`, then refa
 ## Sprint 5
 
 ### Intended final submission
-Alegna Dispach is a CLI superhero dispatch sim: run `Main`, play through three shifts, manually assign heroes to incidents per shift, and watch HR dispatch logs, audit lines, and per-shift reports update city safety, public trust, and hero stress/status. The project implements six custom GoF-style patterns in my own Java code: Strategy, Factory, Observer, Command, State, and Template Method. For final submission I plan to record a ~5 minute demo video (compile/run, play at least one shift, and point to pattern-related files), submit zipped source on D2L with this GitHub link in the comments, and keep `design-patterns-uml.drawio` in the repo root as the final UML diagram.
+Alegna Dispach is a CLI superhero dispatch sim: run `Main`, play through three shifts, manually assign heroes to incidents per shift, and watch HR dispatch logs, audit lines, and per-shift reports update city safety, public trust, and hero stress/status. The project implements six custom GoF-style patterns in my own Java code: Strategy, Factory, Observer, Command, State, and Template Method. 
 
 ### Sprint 5 — pattern and implementation notes
 State replaced a simple availability flag with `HeroState` implementations (`ReadyState`, `OnMissionState`, `RecoveringState`) so overstressed heroes enter an HR hold and cannot be redeployed until they recover across later shifts. Template Method moved the per-shift workflow into `ShiftTemplate` with `CliDispatchShift` supplying CLI-specific hooks, and `Main` now loops three shifts instead of owning all turn logic inline. The hardest part was refactoring without breaking Command, Observer, and Strategy behavior that already depended on `DispatchCenter`. Stress thresholds are tuned so recovery is visible within a multi-shift session.
