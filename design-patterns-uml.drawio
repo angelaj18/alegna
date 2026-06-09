@@ -1,11 +1,11 @@
 <mxfile host="app.diagrams.net" modified="2026-05-26T17:00:00.000Z" agent="Cursor" version="22.1.0" type="device">
-  <diagram id="all-patterns" name="Design-Patterns-Sprint4">
-    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1100" math="0" shadow="0">
+  <diagram id="all-patterns" name="Design-Patterns-Sprint5-Final">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1400" math="0" shadow="0">
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
 
-        <mxCell id="title" value="Alegna Dispach — Design Patterns (Sprint 4)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=16;fontStyle=1" vertex="1" parent="1">
+        <mxCell id="title" value="Alegna Dispach — All 6 Design Patterns (Sprint 5)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=16;fontStyle=1" vertex="1" parent="1">
           <mxGeometry x="40" y="20" width="500" height="30" as="geometry"/>
         </mxCell>
 
@@ -88,13 +88,53 @@
         <mxCell id="DCc" value="&lt;b&gt;DispatchCenter&lt;/b&gt;&lt;hr&gt;+ resolveTurnFromCommands(...): TurnReport&lt;br&gt;+ dispatchHeroToIncident(...)&lt;br&gt;+ skipIncident(...)" style="swimlane;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="360" y="740" width="300" height="100" as="geometry"/>
         </mxCell>
-        <mxCell id="MainC" value="&lt;b&gt;Main&lt;/b&gt;&lt;hr&gt;- collectDispatchCommands(...)&lt;br&gt;- promptDispatchForIncident(...)" style="swimlane;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+        <mxCell id="MainC" value="&lt;b&gt;CliDispatchShift&lt;/b&gt;&lt;hr&gt;- collectCommands(...)&lt;br&gt;- promptDispatchForIncident(...)" style="swimlane;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
           <mxGeometry x="360" y="870" width="280" height="80" as="geometry"/>
         </mxCell>
         <mxCell id="eAHC" style="endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="AHC" target="DCmd"><mxGeometry relative="1" as="geometry"/></mxCell>
         <mxCell id="eSIC" style="endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="SIC" target="DCmd"><mxGeometry relative="1" as="geometry"/></mxCell>
         <mxCell id="eMainC" style="endArrow=open;dashed=1;" edge="1" parent="1" source="MainC" target="DCmd"><mxGeometry relative="1" as="geometry"/></mxCell>
         <mxCell id="eDCc" style="endArrow=open;dashed=1;" edge="1" parent="1" source="DCc" target="DCmd"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- State -->
+        <mxCell id="lblSt" value="State" style="text;html=1;fontStyle=1;fontSize=13" vertex="1" parent="1">
+          <mxGeometry x="400" y="600" width="120" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="HS" value="&lt;&lt;interface&gt;&gt;&lt;br&gt;&lt;b&gt;HeroState&lt;/b&gt;&lt;hr&gt;+ canBeDispatched(): boolean&lt;br&gt;+ onDispatched(hero): void&lt;br&gt;+ onShiftEnd(hero): void&lt;br&gt;+ getStatusLabel(): String" style="swimlane;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="400" y="630" width="280" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="RDY" value="&lt;b&gt;ReadyState&lt;/b&gt;" style="swimlane;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="400" y="760" width="120" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="OMS" value="&lt;b&gt;OnMissionState&lt;/b&gt;" style="swimlane;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="530" y="760" width="130" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="RCV" value="&lt;b&gt;RecoveringState&lt;/b&gt;" style="swimlane;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="400" y="830" width="140" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="HeroSt" value="&lt;b&gt;Hero&lt;/b&gt;&lt;hr&gt;- state: HeroState&lt;hr&gt;+ dispatchToMission(): void&lt;br&gt;+ recoverAfterTurn(): void&lt;br&gt;+ isAvailable(): boolean" style="swimlane;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="400" y="900" width="260" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="eRDY" style="endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="RDY" target="HS"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eOMS" style="endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="OMS" target="HS"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eRCV" style="endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="RCV" target="HS"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eHeroSt" style="endArrow=open;dashed=1;" edge="1" parent="1" source="HeroSt" target="HS"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- Template Method -->
+        <mxCell id="lblTM" value="Template Method" style="text;html=1;fontStyle=1;fontSize=13" vertex="1" parent="1">
+          <mxGeometry x="720" y="720" width="160" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="ST" value="&lt;&lt;abstract&gt;&gt;&lt;br&gt;&lt;b&gt;ShiftTemplate&lt;/b&gt;&lt;hr&gt;+ runShift(shiftNumber): TurnReport&lt;hr&gt;# onShiftStart(shiftNumber)&lt;br&gt;# generateAndOrderIncidents()&lt;br&gt;# collectCommands(...)&lt;br&gt;# onShiftComplete(...)" style="swimlane;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="720" y="750" width="300" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="CDS" value="&lt;b&gt;CliDispatchShift&lt;/b&gt;&lt;hr&gt;+ getTotalShifts(): int&lt;hr&gt;implements template hooks for CLI" style="swimlane;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="720" y="890" width="280" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="MainTM" value="&lt;b&gt;Main&lt;/b&gt;&lt;hr&gt;+ main(args): void&lt;hr&gt;runs CliDispatchShift for 3 shifts" style="swimlane;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="720" y="990" width="260" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="eCDS" style="endArrow=block;endFill=0;dashed=1;html=1;" edge="1" parent="1" source="CDS" target="ST"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eMainTM" style="endArrow=open;dashed=1;" edge="1" parent="1" source="MainTM" target="CDS"><mxGeometry relative="1" as="geometry"/></mxCell>
       </root>
     </mxGraphModel>
   </diagram>

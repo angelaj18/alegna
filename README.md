@@ -73,3 +73,19 @@ For the final project I want to demonstrate Alegna Dispach as a runnable CLI dis
 
 ### Sprint 4 — pattern and implementation notes
 Observer was introduced with `GameEventListener` and `HrDispatchFeed`, then refactored to `DispatchNotifier` so multiple listeners (including `AuditTrailListener`) can subscribe without hard-coding one feed inside `DispatchCenter`. Command replaced raw hero assignment lists with `DispatchCommand` implementations (`AssignHeroCommand`, `SkipIncidentCommand`) executed through `DispatchCenter.resolveTurnFromCommands`. The main difficulty was keeping Strategy and Observer behavior intact while changing how dispatch input is represented; villain flavor text and HR log lines overlap slightly in tone but serve different layers (report vs live feed). UML for all four patterns is in `design-patterns-uml.drawio` at the repo root (open in draw.io / diagrams.net). Remaining risk before final: adding two more patterns without over-refactoring, and expanding gameplay beyond a single turn if time allows.
+
+## Sprint 5
+
+### Intended final submission
+Alegna Dispach is a CLI superhero dispatch sim: run `Main`, play through three shifts, manually assign heroes to incidents per shift, and watch HR dispatch logs, audit lines, and per-shift reports update city safety, public trust, and hero stress/status. The project implements six custom GoF-style patterns in my own Java code: Strategy, Factory, Observer, Command, State, and Template Method. For final submission I plan to record a ~5 minute demo video (compile/run, play at least one shift, and point to pattern-related files), submit zipped source on D2L with this GitHub link in the comments, and keep `design-patterns-uml.drawio` in the repo root as the final UML diagram.
+
+### Sprint 5 — pattern and implementation notes
+State replaced a simple availability flag with `HeroState` implementations (`ReadyState`, `OnMissionState`, `RecoveringState`) so overstressed heroes enter an HR hold and cannot be redeployed until they recover across later shifts. Template Method moved the per-shift workflow into `ShiftTemplate` with `CliDispatchShift` supplying CLI-specific hooks, and `Main` now loops three shifts instead of owning all turn logic inline. The hardest part was refactoring without breaking Command, Observer, and Strategy behavior that already depended on `DispatchCenter`. Stress thresholds are tuned so recovery is visible within a multi-shift session.
+
+### Final submission — known gaps and bugs
+- No graphical UI; CLI only (Scanner input).
+- No save/load between sessions; all state is in-memory for one run.
+- Win/lose conditions are not fully implemented; the sim ends after three shifts with a sign-off message.
+- Random incidents can occasionally produce duplicate incident types across cities in the same shift.
+- Villain codenames are random and not persisted across shifts for the same threat.
+- If invalid non-numeric input is entered at prompts, the program re-prompts (no crash), but there is no quit command mid-shift.
